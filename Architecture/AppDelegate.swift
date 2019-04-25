@@ -8,14 +8,24 @@
 
 import UIKit
 
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
+    private let injectInteractor = InjectInteractor.init()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+        injectInteractor.register()
+        
+        print(NSLocalizedString("Hello", comment: ""))
+        
+        let mainRouter = injectInteractor.get(MainRouter.self)
+        mainRouter?.root(&window)
+        
         return true
     }
 
