@@ -8,6 +8,7 @@
 
 import UIKit
 
+// безопасное извлечение из массива
 extension Collection {
     subscript(safe index: Index) -> Element? {
         return safeObject(at: index)
@@ -18,6 +19,39 @@ extension Collection {
     }
 }
 
+// превращаем массив в типа словаря
+extension Array where Element == String {
+    subscript(name value: String) -> [String] {
+        return filter { str in
+            str == value
+        }
+    }
+    
+    subscript(condition: (String) -> Bool) -> [String] {
+        return filter(condition)
+    }
+    
+   
+}
+
+let arrayStrings = ["av", "ad", "qw", "gh"]
+let filteredArray = arrayStrings[{$0 == "av"}]
+
+// universal
+extension Array {
+    subscript(condition: (Element) -> Bool) -> [Element] {
+        return filter(condition)
+    }
+}
+
+// берем как в словаре типа keys
+extension Array where Element == CGSize {
+    var heights: [CGFloat] {
+        return [CGFloat](Set(map{$0.height})).sorted()
+    }
+}
+
+let arraySizes = [CGSize(width: 12, height: 32), CGSize(width: 16, height: 39), CGSize(width: 19, height: 35), CGSize(width: 11, height: 37)]
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -35,6 +69,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         let mainRouter = injectInteractor.get(MainRouter.self)
         mainRouter?.root(&window)
+        
+        let arr = arraySizes.heights
+        print(arr)
         
         return true
     }
